@@ -16,9 +16,14 @@ public class Personagem : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		// Pulo
 		if (Input.GetButtonDown("Jump")) {
 			rb.AddForce (Vector2.up * impulso);
 		}
+
+		// Movimento
+		float mover = Input.GetAxis("Horizontal") * velocidade * Time.deltaTime;
+		transform.Translate (mover, 0.0f, 0.0f);
 	}
 }

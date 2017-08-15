@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/**
+ * https://www.youtube.com/channel/UCFfoB07rP9kBf_7DC9ez_lQ
+ **/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,14 +11,18 @@ public class Personagem : MonoBehaviour {
 	public float velocidade;
 	public float impulso;
 	public Transform verificaChao;
+	public SpriteRenderer sp;
 	bool estaNoChao;
 	bool puloDuplo;
 
+	Animator animar;
 	Rigidbody2D rb;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
+		animar = GetComponent<Animator> ();
+		sp = GetComponent<SpriteRenderer> ();
 	}
 	
 	// Update is called once per frame
@@ -35,8 +43,18 @@ public class Personagem : MonoBehaviour {
 
 		// Verifica colisão com os blocos do layer Piso
 		estaNoChao = Physics2D.Linecast(transform.position, 
-			verificaChao.position, 1 << LayerMask.NameToLayer("Piso"));
+			verificaChao.position, 
+			1 << LayerMask.NameToLayer("Piso"));
 
-		print (estaNoChao);
+		// Animações
+		animar.SetBool("pJump", estaNoChao);
+		animar.SetFloat ("pMove", Mathf.Abs(Input.GetAxisRaw("Horizontal")));
+
+		// Orientação do personagem
+		if (Input.GetAxisRaw("Horizontal") > 0.0f) {
+			sp.flipX = false;
+		} else if (Input.GetAxisRaw("Horizontal") < 0.0f) {
+			sp.flipX = true;
+		}
 	}
 }
